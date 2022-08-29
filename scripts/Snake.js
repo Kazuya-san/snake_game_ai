@@ -1,5 +1,5 @@
 class Snake {
-  constructor(x, y, size, color, dir, ai, drawSP) {
+  constructor(x, y, size, color, dir, ai, drawSP, useBody) {
     this.x = x;
     this.y = y;
     this.size = size;
@@ -11,15 +11,16 @@ class Snake {
     this.score = 0;
     this.angle = 0;
     this.drawSP = drawSP;
+    this.useBody = useBody;
     //this.distance = 0;
     this.AI = ai;
     this.shortestPathtoFood = [];
     //this.brain = new NeuralNetwork(5, 8, 8, 2);
   }
 
-  reset(ai, drawSP) {
-    this.x = floor(width / 2);
-    this.y = floor(height / 2);
+  reset(ai, drawSP, useBody) {
+    this.x = floor(totalCols / 2) * this.size;
+    this.y = floor(totalRows / 2) * this.size;
     this.direction = random(dir);
     this.speed = this.size;
     this.tail = [];
@@ -27,6 +28,7 @@ class Snake {
     this.AI = ai;
     this.score = 0;
     this.drawSP = drawSP;
+    this.useBody = useBody;
   }
 
   useAI() {
@@ -37,21 +39,38 @@ class Snake {
   //   this.distance = dist(this.x, this.y, food.x, food.y);
   // }
 
+  useTail(use) {
+    this.useBody = use;
+    if (!use) {
+      this.tail = [];
+    }
+  }
+
   showScore() {
-    textSize(20);
+    textSize(17);
     noStroke();
+    fill("yellow");
+    text("Score: " + this.score, 10, height - 15);
     fill("red");
-    text("Score: " + this.score, 10, 20);
+    text(
+      "You can Press A to toggle between User control and AI control.",
+      10,
+      height - 30
+    );
+    text("Press F to switch between FPS 100 and FPS 20", 10, height - 45);
+    text("You can press B to toggle for drawing body or not", 10, height - 60);
+    fill("lightblue");
+    text("By DEFAULT IT USES AI", 10, height - 75);
   }
 
   withinBounds() {
-    if (this.x + this.size > width) {
+    if (this.x > width) {
       this.direction = "l";
       this.dead = true;
     } else if (this.x < 0) {
       this.direction = "r";
       this.dead = true;
-    } else if (this.y + this.size > height) {
+    } else if (this.y > height) {
       this.direction = "u";
       this.dead = true;
     } else if (this.y < 0) {
@@ -188,7 +207,9 @@ class Snake {
     if (distance < 1) {
       this.score++;
       food.randomFoodPos(this.tail);
-      this.tail.push(createVector(this.x, this.y));
+      if (this.useBody) {
+        this.tail.push(createVector(this.x, this.y));
+      }
       return true;
     }
 
@@ -238,9 +259,11 @@ class Snake {
       this.tail = [];
     }
 
-    this.tail.push(createVector(this.x, this.y));
-    if (this.tail.length > 1) {
-      this.tail.shift();
+    if (this.useBody) {
+      this.tail.push(createVector(this.x, this.y));
+      if (this.tail.length > 1) {
+        this.tail.shift();
+      }
     }
   }
 

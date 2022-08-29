@@ -1,7 +1,7 @@
 let snake;
 let food;
 let pauseGame = false;
-let snakeScale = 20; //let dir = ["l", "r", "u", "d"];
+let snakeScale = 30; //let dir = ["l", "r", "u", "d"];
 let dir = ["u", "d", "l", "r"];
 let totalCols;
 let totalRows;
@@ -11,23 +11,26 @@ let ai = true;
 let fps = 20;
 let drawSP = true;
 let fpsChange = false;
+let useBody = true;
 
 function setup() {
-  createCanvas(600, 600);
+  createCanvas(innerWidth, innerHeight);
   frameRate(fps);
+  localStorage.removeItem("allPosition");
+
+  totalCols = floor(width / snakeScale);
+  totalRows = floor(height / snakeScale);
   snake = new Snake(
-    width / 2,
-    height / 2,
+    floor(totalCols / 2) * snakeScale,
+    floor(totalRows / 2) * snakeScale,
     snakeScale,
     "red",
     random(dir),
     ai,
-    drawSP
+    drawSP,
+    useBody
   );
   food = new Food(snakeScale, "green");
-
-  totalCols = width / snakeScale;
-  totalRows = height / snakeScale;
   shortestPath = snake.BreadthFirstSearch(food);
 }
 
@@ -42,11 +45,11 @@ function draw() {
   background(51);
   stroke(100);
   strokeWeight(0.3);
-  for (let x = 1; x <= totalCols; x++) {
+  for (let x = 1; x <= totalRows; x++) {
     line(0, x * snakeScale, width, x * snakeScale);
   }
 
-  for (let y = 1; y <= totalRows; y++) {
+  for (let y = 1; y <= totalCols; y++) {
     line(y * snakeScale, 0, y * snakeScale, height);
   }
 
@@ -98,7 +101,7 @@ function keyPressed() {
     ai = !ai;
     snake.useAI();
   } else if (key === "r") {
-    snake.reset(ai, drawSP);
+    snake.reset(ai, drawSP, useBody);
     food.randomFoodPos();
     shortestPath = snake.BreadthFirstSearch(food);
     indexOfShortest = 0;
@@ -110,5 +113,8 @@ function keyPressed() {
     } else {
       frameRate(fps);
     }
+  } else if (key == "b") {
+    useBody = !useBody;
+    snake.useTail(useBody);
   }
 }
