@@ -46,16 +46,16 @@ class Snake {
 
   withinBounds() {
     if (this.x + this.size > width) {
-      //this.direction = "l";
+      this.direction = "l";
       this.dead = true;
     } else if (this.x < 0) {
-      //this.direction = "r";
+      this.direction = "r";
       this.dead = true;
     } else if (this.y + this.size > height) {
-      //this.direction = "u";
+      this.direction = "u";
       this.dead = true;
     } else if (this.y < 0) {
-      //this.direction = "d";
+      this.direction = "d";
       this.dead = true;
     }
   }

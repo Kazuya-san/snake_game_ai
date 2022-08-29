@@ -95,11 +95,13 @@ function keyPressed() {
     pauseGame = false;
     frameRate(fps);
   } else if (keyCode === 65) {
+    ai = !ai;
     snake.useAI();
   } else if (key === "r") {
-    console.log("pressed r");
     snake.reset(ai, drawSP);
-    //food.randomFoodPos();
+    food.randomFoodPos();
+    shortestPath = snake.BreadthFirstSearch(food);
+    indexOfShortest = 0;
     loop();
   } else if (key == "f") {
     fpsChange = !fpsChange;
