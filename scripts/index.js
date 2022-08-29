@@ -38,10 +38,6 @@ function Spot(x, y) {
   this.t = null;
 }
 
-function mousePressed() {
-  snake.useAI();
-}
-
 function draw() {
   background(51);
   stroke(100);
