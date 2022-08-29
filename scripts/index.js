@@ -10,6 +10,7 @@ let indexOfShortest = 0;
 let ai = true;
 let fps = 20;
 let drawSP = true;
+let fpsChange = false;
 
 function setup() {
   createCanvas(600, 600);
@@ -104,5 +105,12 @@ function keyPressed() {
     snake.reset(ai, drawSP);
     //food.randomFoodPos();
     loop();
+  } else if (key == "f") {
+    fpsChange = !fpsChange;
+    if (fpsChange) {
+      frameRate(100);
+    } else {
+      frameRate(fps);
+    }
   }
 }
