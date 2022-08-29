@@ -1,0 +1,32 @@
+
+NEURAL NETWORK
+    - inputs
+        3 Inputs
+            1 distance_between_snake_food,
+            2 amount_of_available_space_in_grid,
+            3 length_of_snake
+            4 BFS
+            5 optional but using the output from Ray Casting
+            6 Angle between snake and food
+    
+    - Hidden Layers (DENSE LAYERS)
+        
+    
+    - outputs
+        4 outputs
+            1 UP
+            2 DOWN
+            3 LEFT
+            4 RIGHT   
+    
+
+
+TO TRAIN THE NEURAL NETWORK TO LEARN HOW TO PLAY THE GAME: The training data is gathered and optimized by the Genetic algorithm
+
+steps for a genetic algorithm
+    - Population size
+    - Fitness Function
+    - Selection
+    - Crossover
+    - Mutation
+
