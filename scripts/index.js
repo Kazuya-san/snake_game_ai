@@ -8,7 +8,7 @@ let totalRows;
 let shortestPath;
 let indexOfShortest = 0;
 let ai = true;
-let fps = 20;
+let fps = 100;
 let drawSP = true;
 
 function setup() {

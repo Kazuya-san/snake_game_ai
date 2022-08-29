@@ -196,7 +196,7 @@ class Snake {
   }
 
   tailChecking() {
-    if (this.tail.length > 2) {
+    if (this.tail.length > 1) {
       for (let i = 0; i < this.tail.length - 2; i++) {
         if (this.x === this.tail[i].x && this.y === this.tail[i].y) {
           this.dead = true;
