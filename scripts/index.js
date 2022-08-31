@@ -91,7 +91,9 @@ function draw() {
   if (snake.dead) {
     console.log("dead");
     noLoop();
-    alert("Game Over, press R to restart");
+    useHamiltonian
+      ? alert("Game Over You Completed the Grid, press R to restart")
+      : alert("Game Over, press R to restart");
   }
 
   if (snake.eat(food)) {

@@ -37,7 +37,7 @@ class Food {
         )
       );
 
-      if (possiblePos.x === undefined || possiblePos.y === undefined) {
+      if (!possiblePos) {
         return "game over";
       }
       {
