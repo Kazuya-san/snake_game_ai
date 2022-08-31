@@ -37,8 +37,13 @@ class Food {
         )
       );
 
-      this.x = possiblePos.x;
-      this.y = possiblePos.y;
+      if (possiblePos.x === undefined || possiblePos.y === undefined) {
+        return "game over";
+      }
+      {
+        this.x = possiblePos.x;
+        this.y = possiblePos.y;
+      }
     }
   }
 

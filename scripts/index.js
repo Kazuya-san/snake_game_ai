@@ -5,13 +5,15 @@ let snakeScale = 30; //let dir = ["l", "r", "u", "d"];
 let dir = ["u", "d", "l", "r"];
 let totalCols;
 let totalRows;
-let shortestPath;
+let path;
 let indexOfShortest = 0;
 let ai = true;
 let fps = 20;
 let drawSP = true;
 let fpsChange = false;
 let useBody = true;
+let useHamiltonian = false;
+let hamPath;
 
 function setup() {
   createCanvas(innerWidth, innerHeight);
@@ -19,7 +21,7 @@ function setup() {
   localStorage.removeItem("allPosition");
 
   totalCols = floor(width / snakeScale);
-  totalRows = floor(height / snakeScale);
+  totalRows = Math.ceil(height / snakeScale);
   snake = new Snake(
     floor(totalCols / 2) * snakeScale,
     floor(totalRows / 2) * snakeScale,
@@ -31,7 +33,8 @@ function setup() {
     useBody
   );
   food = new Food(snakeScale, "green");
-  shortestPath = snake.BreadthFirstSearch(food);
+  hamPath = snake.hamiltonianCycle();
+  path = useHamiltonian ? hamPath : snake.BreadthFirstSearch(food);
 }
 
 function Spot(x, y) {
@@ -53,29 +56,36 @@ function draw() {
     line(y * snakeScale, 0, y * snakeScale, height);
   }
 
+  // beginShape();
+  // stroke("white");
+  // for (let i = 0; i < path.length; i++) {
+  //   vertex(path[i].x, path[i].y);
+  // }
+  // endShape();
+
   if (!snake.AI) {
-    shortestPath = snake.BreadthFirstSearch(food);
+    path = useHamiltonian ? hamPath : snake.BreadthFirstSearch(food);
   }
 
-  if (indexOfShortest < shortestPath.length) {
+  if (indexOfShortest < path.length) {
     indexOfShortest++;
-  } else if (indexOfShortest >= shortestPath.length) {
+  } else if (indexOfShortest >= path.length) {
     indexOfShortest = 0;
   }
 
   let index = indexOfShortest > 0 ? indexOfShortest - 1 : 0;
 
-  if (shortestPath[index] && snake.AI) {
-    snake.x = shortestPath[index].x;
-    snake.y = shortestPath[index].y;
+  if (path[index] && snake.AI) {
+    snake.x = path[index].x;
+    snake.y = path[index].y;
   } else {
-    shortestPath = snake.BreadthFirstSearch(food);
-    indexOfShortest = 0;
+    path = useHamiltonian ? hamPath : snake.BreadthFirstSearch(food); //snake.BreadthFirstSearch(food);
+    indexOfShortest = useHamiltonian ? indexOfShortest : 0;
   }
 
   food.draw();
-  snake.draw();
   snake.move();
+  snake.draw();
   snake.showScore();
 
   if (snake.dead) {
@@ -85,8 +95,8 @@ function draw() {
   }
 
   if (snake.eat(food)) {
-    shortestPath = snake.BreadthFirstSearch(food);
-    indexOfShortest = 0;
+    path = useHamiltonian ? hamPath : snake.BreadthFirstSearch(food); //snake.BreadthFirstSearch(food);
+    indexOfShortest = useHamiltonian ? indexOfShortest : 0;
   }
 }
 
@@ -103,8 +113,8 @@ function keyPressed() {
   } else if (key === "r") {
     snake.reset(ai, drawSP, useBody);
     food.randomFoodPos();
-    shortestPath = snake.BreadthFirstSearch(food);
-    indexOfShortest = 0;
+    path = useHamiltonian ? hamPath : snake.BreadthFirstSearch(food); //snake.BreadthFirstSearch(food);
+    indexOfShortest = useHamiltonian ? indexOfShortest : 0;
     loop();
   } else if (key == "f") {
     fpsChange = !fpsChange;
@@ -116,5 +126,7 @@ function keyPressed() {
   } else if (key == "b") {
     useBody = !useBody;
     snake.useTail(useBody);
+  } else if (key == "h") {
+    useHamiltonian = !useHamiltonian;
   }
 }

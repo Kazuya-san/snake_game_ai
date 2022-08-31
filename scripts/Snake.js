@@ -78,7 +78,6 @@ class Snake {
       this.dead = true;
     }
   }
-
   handleKeys() {
     if (keyIsDown(LEFT_ARROW)) {
       this.direction = "l";
@@ -267,6 +266,41 @@ class Snake {
     }
   }
 
+  //create a hamiltonian cycle
+  hamiltonianCycle() {
+    let hamiltonianPath = [];
+    let firstRow = [];
+    for (let x = 0; x < totalCols; x++) {
+      for (let y = 0; y < totalRows; y++) {
+        if (y > 0) {
+          let ro;
+          if (x % 2 !== 0) {
+            ro = totalRows - y;
+          } else {
+            ro = y;
+          }
+          hamiltonianPath.push({ x: x * this.size, y: ro * this.size });
+        }
+        if (x === 0 && y === 0) {
+          for (let z = 0; z < totalCols; z++) {
+            let ro = totalCols - z - 1;
+            firstRow.push({ x: ro * this.size, y: 0 });
+          }
+        }
+      }
+    }
+    return [
+      ...hamiltonianPath,
+      ...firstRow,
+      // ...[
+      //   { x: 90, y: 0 },
+      //   { x: 60, y: 0 },
+      //   { x: 30, y: 0 },
+      //   { x: 0, y: 0 },
+      // ],
+    ];
+  }
+
   draw() {
     fill("white");
     stroke("white");
@@ -274,7 +308,7 @@ class Snake {
     rect(this.x, this.y, this.size, this.size);
     fill(this.color);
     //stroke("white");
-    for (let i = this.AI ? 1 : 0; i < this.tail.length; i++) {
+    for (let i = 0; i < this.tail.length - 1; i++) {
       rect(this.tail[i].x, this.tail[i].y, this.size, this.size);
     }
   }
